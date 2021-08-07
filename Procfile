@@ -1,0 +1,1 @@
+web: gunicorn whattowatch.wsgi --log-file -

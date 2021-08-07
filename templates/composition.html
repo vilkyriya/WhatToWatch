@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+
+{% block head_title %}{{composition.name}}{% endblock %}
+
+{% load mathfilters %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<div class="card border-light mb-3 col-lg-4" style="min-width: 45rem;">
+    <div class="card-body">
+        <table class="table table-hover">
+            <tbody>
+                <tr>
+                    <th colspan="2"><h5><strong>{{composition.name}}</strong></h5>
+                    {{ composition.name_eng|default_if_none:"Не указано"}}</th>
+                </tr>
+
+
+                <tr>
+                    <td>Год</td>
+                    <td>{{composition.year}}</td>
+                </tr>
+
+                {% if composition.type == "series" or composition.type == "show" %}
+                <tr>
+                    <td>Сезон</td>
+                    <td>{{composition.season}}</td>
+                </tr>
+                <tr>
+                    <td>Эпизоды</td>
+                    <td>
+                        <div class="btn-toolbar" role="toolbar">
+                            {% for height in composition.height %}
+                            <div class="btn-group mr-2 episode-group" role="group" >
+                                {% for width in composition.width %}
+                                {% with height|mul:10|add:width as cur_ep %}
+                                    {% if cur_ep <= composition.last_watched %}
+                                        <a type="button" class="btn btn-secondary episode"
+                                           href="{% url 'change-watched-episodes' slug=composition.slug episode=cur_ep %}">
+                                            {{ cur_ep }}</a>
+                                    {% elif cur_ep <= composition.episodes%}
+                                        <a type="button" class="btn btn-outline-secondary episode"
+                                           href="{% url 'change-watched-episodes' slug=composition.slug episode=cur_ep %}">
+                                            {{ cur_ep }}</a>
+                                    {% endif %}
+                                {% endwith%}
+                                {% endfor %}
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </td>
+                </tr>
+                {% endif %}
+
+                {% if composition.url_kinopoisk %}
+                <tr>
+                    <td>Кинопоиск</td>
+                    <td><a href="{{composition.url_kinopoisk}}">{{composition.url_kinopoisk}}</a></td>
+                </tr>
+                {% endif %}
+
+                {% if composition.url_doramatv %}
+                <tr>
+                    <td>ДорамаТВ</td>
+                    <td><a href="{{composition.url_doramatv}}">{{composition.url_doramatv}}</a></td>
+                </tr>
+                {% endif %}
+
+                <tr>
+                    {% if composition.last_watched == composition.episodes %}
+                    <td>Мой рейтинг</td>
+                    <td>
+                        <form method='POST' >
+                        {% csrf_token %}
+                            {{ form.rating_my|as_crispy_field }}
+                            <input class="btn btn-outline-success" type="submit" value="Оценить" />
+                        </form>
+                    </td>
+                    {% endif %}
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="card border-light mb-3 col-lg-4" style="max-width: 5rem;">
+</div>
+
+{% if group.count > 0 %}
+<div class="card border-light" style="min-width: 20rem;">
+    <h5>Из серии</h5>
+    <div class="card-body table-responsive" >
+        {% for group_comp in group %}
+        <div class="row card">
+            <div class="card-header">
+                <a href="{{ group_comp.get_absolute_url }}" style="color:black;">
+                    <div class="card-text">{{group_comp.name}} {{group_comp.season}}, {{group_comp.year}}</div>
+                </a>
+            </div>
+            <div class="card-body">
+                {% if group_comp.url_kinopoisk %}
+                <div class="card-text text-secondary"><small><a href="{{group_comp.url_kinopoisk}}">
+                    {{group_comp.url_kinopoisk}}</a></small></div>
+                {% endif %}
+                {% if group_comp.url_doramatv %}
+                <div class="card-text text-secondary"><small><a href="{{group_comp.url_doramatv}}">
+                    {{group_comp.url_doramatv}}</a></small></div>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+
+
+{% endblock %}

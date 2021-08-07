@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+
+{% block head_title %}Главная{% endblock %}
+
+{% block content %}
+<div class="card border-light mb-3 col-lg-4" style="min-width: 75rem;">
+    <ul class="nav nav-tabs justify-content-center">
+      <li class="nav-item" style="min-width: 20rem; text-align: center;">
+        <a class="nav-link active" data-toggle="tab" href="#movies"><h5>Фильмы</h5></a>
+      </li>
+      <li class="nav-item" style="min-width: 20rem; text-align: center;">
+        <a class="nav-link" data-toggle="tab" href="#series"><h5>Сериалы</h5></a>
+      </li>
+      <li class="nav-item" style="min-width: 20rem; text-align: center;">
+        <a class="nav-link" data-toggle="tab" href="#shows"><h5>Шоу</h5></a>
+      </li>
+    </ul>
+    <div id="myTabContent" class="tab-content">
+        <div class="tab-pane fade active show" id="movies">
+            {% if movies_to_watch %}
+            <div class="card-body table-responsive" >
+                <h3>Что-то новое</h3>
+                <div class="row" align="center">
+                    {% for composition in movies_to_watch %}
+                    <div class="card col-md-3" >
+                        <div class="card-header">
+                            <a href="{{ composition.get_absolute_url }}" style="color:black;">
+                                <div class="card-text">{{composition.name}} {{composition.season}}, {{composition.year}}</div>
+                            </a>
+                            <div class="card-text text-secondary"><small>{{composition.name_eng}}</small></div>
+                        </div>
+                        <div class="card-body">
+                            {% if composition.url_kinopoisk %}
+                            <div class="card-text text-secondary"><small><a href="{{composition.url_kinopoisk}}">
+                                {{composition.url_kinopoisk}}</a></small></div>
+                            {% endif %}
+                            {% if composition.url_doramatv %}
+                            <div class="card-text text-secondary"><small><a href="{{composition.url_doramatv}}">
+                                {{composition.url_doramatv}}</a></small></div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+        <div class="tab-pane fade" id="series">
+            {% if series_in_process %}
+            <div class="card-body table-responsive" >
+                <h3>Досмотреть</h3>
+                <div class="row" align="center">
+                    {% for composition in series_in_process %}
+                    <div class="card col-md-3" >
+                        <div class="card-header">
+                            <a href="{{ composition.get_absolute_url }}" style="color:black;">
+                                <div class="card-text">{{composition.name}} {{composition.season}}, {{composition.year}}</div>
+                            </a>
+                            <div class="card-text text-secondary"><small>{{composition.name_eng}}</small></div>
+                        </div>
+                        <div class="card-body">
+                            {% if composition.url_kinopoisk %}
+                            <div class="card-text text-secondary"><small><a href="{{composition.url_kinopoisk}}">
+                                {{composition.url_kinopoisk}}</a></small></div>
+                            {% endif %}
+                            {% if composition.url_doramatv %}
+                            <div class="card-text text-secondary"><small><a href="{{composition.url_doramatv}}">
+                                {{composition.url_doramatv}}</a></small></div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+            {% if series_to_watch %}
+            <div class="card-body table-responsive" >
+                <h3>Что-то новое</h3>
+                <div class="row" align="center">
+                    {% for composition in series_to_watch %}
+                    <div class="card col-md-3" >
+                        <div class="card-header">
+                            <a href="{{ composition.get_absolute_url }}" style="color:black;">
+                                <div class="card-text">{{composition.name}} {{composition.season}}, {{composition.year}}</div>
+                            </a>
+                            <div class="card-text text-secondary"><small>{{composition.name_eng}}</small></div>
+                        </div>
+                        <div class="card-body">
+                            {% if composition.url_kinopoisk %}
+                            <div class="card-text text-secondary"><small><a href="{{composition.url_kinopoisk}}">
+                                {{composition.url_kinopoisk}}</a></small></div>
+                            {% endif %}
+                            {% if composition.url_doramatv %}
+                            <div class="card-text text-secondary"><small><a href="{{composition.url_doramatv}}">
+                                {{composition.url_doramatv}}</a></small></div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+        <div class="tab-pane fade" id="shows">
+            {% if shows_in_process %}
+            <div class="card-body table-responsive" >
+                <h3>Досмотреть</h3>
+                <div class="row" align="center">
+                    {% for composition in shows_in_process %}
+                    <div class="card col-md-3" >
+                        <div class="card-header">
+                            <a href="{{ composition.get_absolute_url }}" style="color:black;">
+                                <div class="card-text">{{composition.name}} {{composition.season}}, {{composition.year}}</div>
+                            </a>
+                            <div class="card-text text-secondary"><small>{{composition.name_eng}}</small></div>
+                        </div>
+                        <div class="card-body">
+                            {% if composition.url_kinopoisk %}
+                            <div class="card-text text-secondary"><small><a href="{{composition.url_kinopoisk}}">
+                                {{composition.url_kinopoisk}}</a></small></div>
+                            {% endif %}
+                            {% if composition.url_doramatv %}
+                            <div class="card-text text-secondary"><small><a href="{{composition.url_doramatv}}">
+                                {{composition.url_doramatv}}</a></small></div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+            {% if shows_to_watch %}
+            <div class="card-body table-responsive" >
+                <h3>Что-то новое</h3>
+                <div class="row" align="center">
+                    {% for composition in shows_to_watch %}
+                    <div class="card col-md-3" >
+                        <div class="card-header">
+                            <a href="{{ composition.get_absolute_url }}" style="color:black;">
+                                <div class="card-text">{{composition.name}} {{composition.season}}, {{composition.year}}</div>
+                            </a>
+                            <div class="card-text text-secondary"><small>{{composition.name_eng}}</small></div>
+                        </div>
+                        <div class="card-body">
+                            {% if composition.url_kinopoisk %}
+                            <div class="card-text text-secondary"><small><a href="{{composition.url_kinopoisk}}">
+                                {{composition.url_kinopoisk}}</a></small></div>
+                            {% endif %}
+                            {% if composition.url_doramatv %}
+                            <div class="card-text text-secondary"><small><a href="{{composition.url_doramatv}}">
+                                {{composition.url_doramatv}}</a></small></div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
