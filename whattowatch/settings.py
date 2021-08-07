@@ -29,7 +29,7 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', '1uiy!0f^qw00yu1sudh_zjf#c!i99l
 # DEBUG = True
 DEBUG = bool( os.environ.get('DJANGO_DEBUG', True) )
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['vilkyriyawhattowatch.herokuapp.com', '127.0.0.1']
 
 
 # Application definition
