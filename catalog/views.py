@@ -15,20 +15,21 @@ from django.db import IntegrityError
 
 import math
 
+from .utils import get_full_name
+
 
 class HomePageView(ListView):
     template_name = 'home.html'
     model = Composition
-    context_object_name = 'composition'
 
     def get_context_data(self, **kwargs):
-        movies_to_watch = Composition.objects.filter(type='movie', status='to_watch').order_by('?')
+        movies_to_watch = get_full_name(Composition.objects.filter(type='movie', status='to_watch').order_by('?'))
 
-        series_to_watch = Composition.objects.filter(type='series', status='to_watch').order_by('?')
-        series_in_process = Composition.objects.filter(type='series', status='in_process').order_by('?')
+        series_to_watch = get_full_name(Composition.objects.filter(type='series', status='to_watch').order_by('?'))
+        series_in_process = get_full_name(Composition.objects.filter(type='series', status='in_process').order_by('?'))
 
-        shows_to_watch = Composition.objects.filter(type='show', status='to_watch').order_by('?')
-        shows_in_process = Composition.objects.filter(type='show', status='in_process').order_by('?')
+        shows_to_watch = get_full_name(Composition.objects.filter(type='show', status='to_watch').order_by('?'))
+        shows_in_process = get_full_name(Composition.objects.filter(type='show', status='in_process').order_by('?'))
 
         context = {'movies_to_watch': movies_to_watch,
                    'series_to_watch': series_to_watch,
@@ -59,6 +60,7 @@ class CatalogPageView(ListView):
         paginator = Paginator(seriesfilter.qs.order_by('name'), self.paginate_by)
         page_number = self.request.GET.get('page')
         page_obj = paginator.get_page(page_number)
+        page_obj = get_full_name(page_obj)
 
         context = {'compositions': page_obj, 'page_obj': page_obj, 'filter': seriesfilter, 'type': self.kwargs['type']}
         return context
@@ -88,7 +90,7 @@ class CompositionView(DetailView):
             composition.width = width
 
         if composition.id_group:
-            group = Composition.objects.filter(id_group=composition.id_group)\
+            group = Composition.objects.filter(id_group=composition.id_group) \
                 .exclude(id_composition=composition.id_composition).order_by('year')
         else:
             group = None
