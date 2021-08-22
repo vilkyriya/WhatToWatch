@@ -1,14 +1,22 @@
-# This is an auto-generated Django model module.
-# You'll have to do the following manually to clean this up:
-#   * Rearrange models' order
-#   * Make sure each model has one field with primary_key=True
-#   * Make sure each ForeignKey and OneToOneField has `on_delete` set to the desired behavior
-#   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
-# Feel free to rename the models, but don't rename db_table values or field names.
 from django.db import models
 from django.shortcuts import reverse
 from autoslug import AutoSlugField
-from autoslug.settings import slugify as default_slugify, slugify
+from autoslug.settings import slugify
+
+
+def get_season(type, year, id_group):
+    if type == "movie":
+        return 0
+
+    if not id_group:
+        return 1
+
+    compositions = Composition.objects.filter(id_group=id_group, year__lt=year).order_by('year')
+
+    if len(compositions) == 0:
+        return 1
+    else:
+        return compositions.last().season + 1
 
 
 class Group(models.Model):
@@ -96,9 +104,18 @@ class Composition(models.Model):
         })
 
     def save(self, *args, **kwargs):
+        if not self.season:
+            self.season = get_season(self.type, self.year, self.id_group)
+
         if not self.slug:
             if self.type == "movie":
                 self.slug = '-'.join((slugify(self.name_eng), slugify(self.year)))
             else:
                 self.slug = '-'.join((slugify(self.name_eng), slugify(self.season), slugify(self.year)))
+
+        if not self.episodes:
+            self.episodes = 1
+
+        if not self.last_watched:
+            self.last_watched = 0
         super(Composition, self).save(*args, **kwargs)
