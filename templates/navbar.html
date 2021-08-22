@@ -32,7 +32,7 @@
             <ul class="navbar-nav nav-flex-icons">
                 {% if not request.user.is_authenticated %}
                     <li class="nav-item">
-                        <a class="nav-link" href="/admin/">
+                        <a class="nav-link" href="{% url 'login' %}">
                             <span> Войти </span>
                         </a>
                     </li>
@@ -43,7 +43,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/admin/logout/">
+                        <a class="nav-link" href="{% url 'logout' %}">
                             <span> Выйти </span>
                         </a>
                     </li>
