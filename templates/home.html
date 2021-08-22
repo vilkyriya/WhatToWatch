@@ -25,7 +25,7 @@
                     <div class="card col-md-3" >
                         <div class="card-header">
                             <a href="{{ composition.get_absolute_url }}" style="color:black;">
-                                <div class="card-text">{{composition.name}} {{composition.season}}, {{composition.year}}</div>
+                                <div class="card-text">{{composition.name}}, {{composition.year}}</div>
                             </a>
                             <div class="card-text text-secondary"><small>{{composition.name_eng}}</small></div>
                         </div>
@@ -54,7 +54,11 @@
                     <div class="card col-md-3" >
                         <div class="card-header">
                             <a href="{{ composition.get_absolute_url }}" style="color:black;">
+                                {% if composition.id_group == None %}
+                                <div class="card-text">{{composition.name}}, {{composition.year}}</div>
+                                {% else %}
                                 <div class="card-text">{{composition.name}} {{composition.season}}, {{composition.year}}</div>
+                                {% endif %}
                             </a>
                             <div class="card-text text-secondary"><small>{{composition.name_eng}}</small></div>
                         </div>
@@ -81,7 +85,11 @@
                     <div class="card col-md-3" >
                         <div class="card-header">
                             <a href="{{ composition.get_absolute_url }}" style="color:black;">
+                                {% if composition.id_group == None %}
+                                <div class="card-text">{{composition.name}}, {{composition.year}}</div>
+                                {% else %}
                                 <div class="card-text">{{composition.name}} {{composition.season}}, {{composition.year}}</div>
+                                {% endif %}
                             </a>
                             <div class="card-text text-secondary"><small>{{composition.name_eng}}</small></div>
                         </div>
@@ -110,7 +118,11 @@
                     <div class="card col-md-3" >
                         <div class="card-header">
                             <a href="{{ composition.get_absolute_url }}" style="color:black;">
+                                {% if composition.id_group == None %}
+                                <div class="card-text">{{composition.name}}, {{composition.year}}</div>
+                                {% else %}
                                 <div class="card-text">{{composition.name}} {{composition.season}}, {{composition.year}}</div>
+                                {% endif %}
                             </a>
                             <div class="card-text text-secondary"><small>{{composition.name_eng}}</small></div>
                         </div>
@@ -137,7 +149,11 @@
                     <div class="card col-md-3" >
                         <div class="card-header">
                             <a href="{{ composition.get_absolute_url }}" style="color:black;">
+                                {% if composition.id_group == None %}
+                                <div class="card-text">{{composition.name}}, {{composition.year}}</div>
+                                {% else %}
                                 <div class="card-text">{{composition.name}} {{composition.season}}, {{composition.year}}</div>
+                                {% endif %}
                             </a>
                             <div class="card-text text-secondary"><small>{{composition.name_eng}}</small></div>
                         </div>
