@@ -1,0 +1,20 @@
+{% for composition in compositions %}
+<div class="card col-md-3" >
+    <div class="card-header">
+        <a href="{{ composition.get_absolute_url }}" style="color:black;">
+            <div class="card-text">{{composition.full_name}}</div>
+        </a>
+        <div class="card-text text-secondary"><small>{{composition.full_name_eng}}</small></div>
+    </div>
+    <div class="card-body">
+        {% if composition.url_kinopoisk %}
+        <div class="card-text text-secondary"><small><a href="{{composition.url_kinopoisk}}">
+            {{composition.url_kinopoisk}}</a></small></div>
+        {% endif %}
+        {% if composition.url_doramatv %}
+        <div class="card-text text-secondary"><small><a href="{{composition.url_doramatv}}">
+            {{composition.url_doramatv}}</a></small></div>
+        {% endif %}
+    </div>
+</div>
+{% endfor %}

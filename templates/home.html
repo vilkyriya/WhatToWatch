@@ -21,26 +21,7 @@
             <div class="card-body table-responsive" >
                 <h3>Что-то новое</h3>
                 <div class="row" align="center">
-                    {% for composition in movies_to_watch %}
-                    <div class="card col-md-3" >
-                        <div class="card-header">
-                            <a href="{{ composition.get_absolute_url }}" style="color:black;">
-                                <div class="card-text">{{composition.name}}, {{composition.year}}</div>
-                            </a>
-                            <div class="card-text text-secondary"><small>{{composition.name_eng}}</small></div>
-                        </div>
-                        <div class="card-body">
-                            {% if composition.url_kinopoisk %}
-                            <div class="card-text text-secondary"><small><a href="{{composition.url_kinopoisk}}">
-                                {{composition.url_kinopoisk}}</a></small></div>
-                            {% endif %}
-                            {% if composition.url_doramatv %}
-                            <div class="card-text text-secondary"><small><a href="{{composition.url_doramatv}}">
-                                {{composition.url_doramatv}}</a></small></div>
-                            {% endif %}
-                        </div>
-                    </div>
-                    {% endfor %}
+                    {% include "home_section.html" with compositions=movies_to_watch %}
                 </div>
             </div>
             {% endif %}
@@ -50,30 +31,7 @@
             <div class="card-body table-responsive" >
                 <h3>Досмотреть</h3>
                 <div class="row" align="center">
-                    {% for composition in series_in_process %}
-                    <div class="card col-md-3" >
-                        <div class="card-header">
-                            <a href="{{ composition.get_absolute_url }}" style="color:black;">
-                                {% if composition.id_group == None %}
-                                <div class="card-text">{{composition.name}}, {{composition.year}}</div>
-                                {% else %}
-                                <div class="card-text">{{composition.name}} {{composition.season}}, {{composition.year}}</div>
-                                {% endif %}
-                            </a>
-                            <div class="card-text text-secondary"><small>{{composition.name_eng}}</small></div>
-                        </div>
-                        <div class="card-body">
-                            {% if composition.url_kinopoisk %}
-                            <div class="card-text text-secondary"><small><a href="{{composition.url_kinopoisk}}">
-                                {{composition.url_kinopoisk}}</a></small></div>
-                            {% endif %}
-                            {% if composition.url_doramatv %}
-                            <div class="card-text text-secondary"><small><a href="{{composition.url_doramatv}}">
-                                {{composition.url_doramatv}}</a></small></div>
-                            {% endif %}
-                        </div>
-                    </div>
-                    {% endfor %}
+                    {% include "home_section.html" with compositions=series_in_process %}
                 </div>
             </div>
             {% endif %}
@@ -81,30 +39,7 @@
             <div class="card-body table-responsive" >
                 <h3>Что-то новое</h3>
                 <div class="row" align="center">
-                    {% for composition in series_to_watch %}
-                    <div class="card col-md-3" >
-                        <div class="card-header">
-                            <a href="{{ composition.get_absolute_url }}" style="color:black;">
-                                {% if composition.id_group == None %}
-                                <div class="card-text">{{composition.name}}, {{composition.year}}</div>
-                                {% else %}
-                                <div class="card-text">{{composition.name}} {{composition.season}}, {{composition.year}}</div>
-                                {% endif %}
-                            </a>
-                            <div class="card-text text-secondary"><small>{{composition.name_eng}}</small></div>
-                        </div>
-                        <div class="card-body">
-                            {% if composition.url_kinopoisk %}
-                            <div class="card-text text-secondary"><small><a href="{{composition.url_kinopoisk}}">
-                                {{composition.url_kinopoisk}}</a></small></div>
-                            {% endif %}
-                            {% if composition.url_doramatv %}
-                            <div class="card-text text-secondary"><small><a href="{{composition.url_doramatv}}">
-                                {{composition.url_doramatv}}</a></small></div>
-                            {% endif %}
-                        </div>
-                    </div>
-                    {% endfor %}
+                    {% include "home_section.html" with compositions=series_to_watch %}
                 </div>
             </div>
             {% endif %}
@@ -114,30 +49,7 @@
             <div class="card-body table-responsive" >
                 <h3>Досмотреть</h3>
                 <div class="row" align="center">
-                    {% for composition in shows_in_process %}
-                    <div class="card col-md-3" >
-                        <div class="card-header">
-                            <a href="{{ composition.get_absolute_url }}" style="color:black;">
-                                {% if composition.id_group == None %}
-                                <div class="card-text">{{composition.name}}, {{composition.year}}</div>
-                                {% else %}
-                                <div class="card-text">{{composition.name}} {{composition.season}}, {{composition.year}}</div>
-                                {% endif %}
-                            </a>
-                            <div class="card-text text-secondary"><small>{{composition.name_eng}}</small></div>
-                        </div>
-                        <div class="card-body">
-                            {% if composition.url_kinopoisk %}
-                            <div class="card-text text-secondary"><small><a href="{{composition.url_kinopoisk}}">
-                                {{composition.url_kinopoisk}}</a></small></div>
-                            {% endif %}
-                            {% if composition.url_doramatv %}
-                            <div class="card-text text-secondary"><small><a href="{{composition.url_doramatv}}">
-                                {{composition.url_doramatv}}</a></small></div>
-                            {% endif %}
-                        </div>
-                    </div>
-                    {% endfor %}
+                    {% include "home_section.html" with compositions=shows_in_process %}
                 </div>
             </div>
             {% endif %}
@@ -145,30 +57,7 @@
             <div class="card-body table-responsive" >
                 <h3>Что-то новое</h3>
                 <div class="row" align="center">
-                    {% for composition in shows_to_watch %}
-                    <div class="card col-md-3" >
-                        <div class="card-header">
-                            <a href="{{ composition.get_absolute_url }}" style="color:black;">
-                                {% if composition.id_group == None %}
-                                <div class="card-text">{{composition.name}}, {{composition.year}}</div>
-                                {% else %}
-                                <div class="card-text">{{composition.name}} {{composition.season}}, {{composition.year}}</div>
-                                {% endif %}
-                            </a>
-                            <div class="card-text text-secondary"><small>{{composition.name_eng}}</small></div>
-                        </div>
-                        <div class="card-body">
-                            {% if composition.url_kinopoisk %}
-                            <div class="card-text text-secondary"><small><a href="{{composition.url_kinopoisk}}">
-                                {{composition.url_kinopoisk}}</a></small></div>
-                            {% endif %}
-                            {% if composition.url_doramatv %}
-                            <div class="card-text text-secondary"><small><a href="{{composition.url_doramatv}}">
-                                {{composition.url_doramatv}}</a></small></div>
-                            {% endif %}
-                        </div>
-                    </div>
-                    {% endfor %}
+                    {% include "home_section.html" with compositions=shows_to_watch %}
                 </div>
             </div>
             {% endif %}
