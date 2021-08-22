@@ -15,7 +15,7 @@ from django.db import IntegrityError
 
 import math
 
-from .utils import get_full_name
+from .utils import get_full_name, get_current_to_watch
 
 
 class HomePageView(ListView):
@@ -23,13 +23,21 @@ class HomePageView(ListView):
     model = Composition
 
     def get_context_data(self, **kwargs):
-        movies_to_watch = get_full_name(Composition.objects.filter(type='movie', status='to_watch').order_by('?'))
+        movies_to_watch = Composition.objects.filter(type='movie', status='to_watch').order_by('?')
+        movies_to_watch, _ = get_current_to_watch(movies_to_watch)
+        movies_to_watch = get_full_name(movies_to_watch)
 
-        series_to_watch = get_full_name(Composition.objects.filter(type='series', status='to_watch').order_by('?'))
-        series_in_process = get_full_name(Composition.objects.filter(type='series', status='in_process').order_by('?'))
+        series_to_watch = Composition.objects.filter(type='series', status='to_watch').order_by('?')
+        series_in_process = Composition.objects.filter(type='series', status='in_process').order_by('?')
+        series_to_watch, series_in_process = get_current_to_watch(series_to_watch, series_in_process)
+        series_to_watch = get_full_name(series_to_watch)
+        series_in_process = get_full_name(series_in_process)
 
-        shows_to_watch = get_full_name(Composition.objects.filter(type='show', status='to_watch').order_by('?'))
-        shows_in_process = get_full_name(Composition.objects.filter(type='show', status='in_process').order_by('?'))
+        shows_to_watch = Composition.objects.filter(type='show', status='to_watch').order_by('?')
+        shows_in_process = Composition.objects.filter(type='show', status='in_process').order_by('?')
+        shows_to_watch, shows_in_process = get_current_to_watch(shows_to_watch, shows_in_process)
+        shows_to_watch = get_full_name(shows_to_watch)
+        shows_in_process = get_full_name(shows_in_process)
 
         context = {'movies_to_watch': movies_to_watch,
                    'series_to_watch': series_to_watch,
