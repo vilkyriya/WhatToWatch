@@ -68,7 +68,7 @@
                 {% endif %}
 
                 <tr>
-                    {% if composition.last_watched == composition.episodes %}
+                    {% if composition.last_watched == composition.episodes or composition.type == "movie" %}
                     <td>Мой рейтинг</td>
                     <td>
                         <form method='POST' >
