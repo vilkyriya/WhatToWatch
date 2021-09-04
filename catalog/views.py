@@ -8,7 +8,7 @@ from django.views.generic import ListView, DetailView
 from catalog.models import Composition
 from .filter import MovieFilter, SeriesShowFilter
 from .forms import CompositionForm
-from .utils import get_full_name, get_current_to_watch
+from .utils import *
 
 
 class HomePageView(ListView):
@@ -25,12 +25,14 @@ class HomePageView(ListView):
         series_to_watch, series_in_process = get_current_to_watch(series_to_watch, series_in_process)
         series_to_watch = get_full_name(series_to_watch)
         series_in_process = get_full_name(series_in_process)
+        series_in_process = get_progress_percentage(series_in_process)
 
         shows_to_watch = Composition.objects.filter(type='show', status='to_watch').order_by('?')
         shows_in_process = Composition.objects.filter(type='show', status='in_process').order_by('?')
         shows_to_watch, shows_in_process = get_current_to_watch(shows_to_watch, shows_in_process)
         shows_to_watch = get_full_name(shows_to_watch)
         shows_in_process = get_full_name(shows_in_process)
+        shows_in_process = get_progress_percentage(shows_in_process)
 
         context = {'movies_to_watch': movies_to_watch,
                    'series_to_watch': series_to_watch,
