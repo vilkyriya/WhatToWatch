@@ -1,7 +1,7 @@
-from django.db import models
-from django.shortcuts import reverse
 from autoslug import AutoSlugField
 from autoslug.settings import slugify
+from django.db import models
+from django.shortcuts import reverse
 
 
 def get_season(type, year, id_group):

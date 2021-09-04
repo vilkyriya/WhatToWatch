@@ -1,20 +1,13 @@
+from django.contrib import messages
 from django.core.paginator import Paginator
-from django.shortcuts import render, get_object_or_404
-
-from django.views.generic import TemplateView, ListView, DetailView
-from django_filters.views import FilterView
-from catalog.models import Composition, Group
+from django.db import IntegrityError
+from django.shortcuts import get_object_or_404
 from django.shortcuts import redirect
+from django.views.generic import ListView, DetailView
 
+from catalog.models import Composition
 from .filter import MovieFilter, SeriesShowFilter
 from .forms import CompositionForm
-
-from django.contrib import messages
-
-from django.db import IntegrityError
-
-import math
-
 from .utils import get_full_name, get_current_to_watch
 
 

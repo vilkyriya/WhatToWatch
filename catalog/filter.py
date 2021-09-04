@@ -1,9 +1,5 @@
-import operator
-from functools import reduce
-
 import django_filters
 from django import forms
-from django.db.models import Q
 
 from catalog.models import Composition
 
@@ -25,9 +21,10 @@ class MovieFilter(django_filters.FilterSet):
                                             widget=forms.NumberInput)
 
     rating_my__gte = django_filters.NumberFilter(field_name='rating_my', lookup_expr='gte', label="Мой рейтинг",
-                                              widget=forms.NumberInput)
+                                                 widget=forms.NumberInput)
     rating_my__lte = django_filters.NumberFilter(field_name='rating_my', lookup_expr='lte', label="",
-                                              widget=forms.NumberInput)
+                                                 widget=forms.NumberInput)
+
     class Meta:
         model = Composition
         fields = []
@@ -44,7 +41,7 @@ class SeriesShowFilter(django_filters.FilterSet):
     )
 
     season = django_filters.NumberFilter(field_name='season', lookup_expr='iexact', label="Сезон",
-                                            widget=forms.NumberInput)
+                                         widget=forms.NumberInput)
 
     status = django_filters.ChoiceFilter(field_name='status', label="Статус", choices=STATUS_CHOICES)
 
@@ -54,9 +51,9 @@ class SeriesShowFilter(django_filters.FilterSet):
                                             widget=forms.NumberInput)
 
     rating_my__gte = django_filters.NumberFilter(field_name='rating_my', lookup_expr='gte', label="Мой рейтинг",
-                                              widget=forms.NumberInput)
+                                                 widget=forms.NumberInput)
     rating_my__lte = django_filters.NumberFilter(field_name='rating_my', lookup_expr='lte', label="",
-                                              widget=forms.NumberInput)
+                                                 widget=forms.NumberInput)
 
     class Meta:
         model = Composition
