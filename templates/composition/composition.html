@@ -16,7 +16,6 @@
                     {{ composition.name_eng|default_if_none:"Не указано"}}</th>
                 </tr>
 
-
                 <tr>
                     <td>Год</td>
                     <td>{{composition.year}}</td>
@@ -84,35 +83,14 @@
     </div>
 </div>
 
+{% if group_show %}
+
+<!--костыль чтобы между информацией и группой было место-->
 <div class="card border-light mb-3 col-lg-4" style="max-width: 5rem;">
 </div>
 
-{% if group.count > 0 %}
-<div class="card border-light" style="min-width: 20rem;">
-    <h5>Из серии</h5>
-    <div class="card-body table-responsive" >
-        {% for group_comp in group %}
-        <div class="row card">
-            <div class="card-header">
-                <a href="{{ group_comp.get_absolute_url }}" style="color:black;">
-                    <div class="card-text">{{group_comp.name}} {{group_comp.season}}, {{group_comp.year}}</div>
-                </a>
-            </div>
-            <div class="card-body">
-                {% if group_comp.url_kinopoisk %}
-                <div class="card-text text-secondary"><small><a href="{{group_comp.url_kinopoisk}}">
-                    {{group_comp.url_kinopoisk}}</a></small></div>
-                {% endif %}
-                {% if group_comp.url_doramatv %}
-                <div class="card-text text-secondary"><small><a href="{{group_comp.url_doramatv}}">
-                    {{group_comp.url_doramatv}}</a></small></div>
-                {% endif %}
-            </div>
-        </div>
-        {% endfor %}
-    </div>
-</div>
-{% endif %}
+{% include "composition/group.html" %}
 
+{% endif %}
 
 {% endblock %}

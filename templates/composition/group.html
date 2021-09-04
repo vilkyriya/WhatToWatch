@@ -1,0 +1,60 @@
+<div class="card border-light" style="min-width: 20rem;">
+    <div class="card-body">
+        <table class="table table-hover">
+            <tbody>
+            <tr>
+                <th>
+                    <h5><strong>Из серии</strong></h5>
+                </th>
+            </tr>
+            {% for group_comp in group_show %}
+                <tr>
+                     <td>
+                         {% if group_comp.full_name == composition.full_name %}
+                         <a class="btn-link disabled" href="#" style="color:#18bc9c;">
+                             <div class="card-text">{{group_comp.full_name}}</div>
+                         </a>
+                         {% else %}
+                         <a href="{{ group_comp.get_absolute_url }}" style="color:black;">
+                             <div class="card-text">{{group_comp.full_name}}</div>
+                         </a>
+                         {% endif %}
+                     </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        {% if group_collapse %}
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <td>
+                    <a data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample" style="color:black;">
+                        <strong>Показать остальные</strong>
+                    </a>
+                </td>
+            </tr>
+            </thead>
+
+            <tbody class="collapse" id="collapseExample">
+            {% for group_comp in group_collapse %}
+                <tr>
+                     <td>
+                         {% if group_comp.full_name == composition.full_name %}
+                         <a class="btn-link disabled" href="#" style="color:#18bc9c;">
+                             <div class="card-text">{{group_comp.full_name}}</div>
+                         </a>
+                         {% else %}
+                         <a href="{{ group_comp.get_absolute_url }}" style="color:black;">
+                             <div class="card-text">{{group_comp.full_name}}</div>
+                         </a>
+                         {% endif %}
+                     </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+    </div>
+</div>

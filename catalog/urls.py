@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import HomePageView, CatalogPageView, CompositionView, change_watched_episodes
+from .views import *
 from django.contrib.auth.decorators import login_required
 
 
