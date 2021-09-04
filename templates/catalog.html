@@ -1,6 +1,14 @@
 {% extends "base.html" %}
 
-{% block head_title %}Каталог сериалов{% endblock %}
+{% block head_title %}
+{% if type == 'movie' %}
+Каталог фильмов
+{% elif type == 'series' %}
+Каталог сериалов
+{% elif type == 'show' %}
+Каталог шоу
+{% endif %}
+{% endblock %}
 
 {% load crispy_forms_tags %}
 {% load mathfilters %}
