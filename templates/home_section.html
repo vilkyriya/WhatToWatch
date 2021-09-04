@@ -1,11 +1,10 @@
 {% for composition in compositions %}
 <div class="card col-md-3">
     {% if composition.last_watched and composition.last_watched > 0 %}
-    <div class="card-header bg-transparent ">
-        <div class="card-text">
-            <small style="color:#18bc9c;"><strong>
-                {{composition.last_watched}} / {{composition.episodes}}
-            </strong></small>
+    <div class="progress">
+        <div class="progress-bar bg-secondary" role="progressbar" style="width: {{composition.progress}}%;"
+             aria-valuenow="{{composition.last_watched}}" aria-valuemin="0" aria-valuemax="{{composition.episodes}}">
+            <small>{{composition.last_watched}} / {{composition.episodes}}</small>
         </div>
     </div>
     {% endif %}
