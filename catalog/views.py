@@ -76,7 +76,7 @@ class CatalogPageView(ListView):
 
 class CompositionView(DetailView):
     model = Composition
-    template_name = 'composition.html'
+    template_name = 'composition/composition.html'
     context_object_name = 'composition'
 
     def get_context_data(self, **kwargs):
@@ -98,12 +98,19 @@ class CompositionView(DetailView):
             composition.width = width
 
         if composition.id_group:
-            group = Composition.objects.filter(id_group=composition.id_group) \
-                .exclude(id_composition=composition.id_composition).order_by('year')
+            group = Composition.objects.filter(id_group=composition.id_group).order_by('year')
+            group = get_full_name(group)
         else:
-            group = None
+            group = []
 
-        context = {'composition': composition, 'form': form, 'group': group}
+        composition = get_full_name([composition, ])[0]
+
+        context = {
+            'composition': composition,
+            'form': form,
+            'group_show': group[:5],
+            'group_collapse': group[5:],
+        }
         return context
 
     def post(self, *args, **kwargs):
