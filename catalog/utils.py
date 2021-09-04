@@ -40,6 +40,7 @@ def get_current_to_watch(compositions_to_watch, compositions_in_process=None):
 
 def get_progress_percentage(compositions):
     for composition in compositions:
-        composition.progress = int(composition.last_watched / composition.episodes * 100)
+        progress = int(composition.last_watched / composition.episodes * 100)
+        composition.progress = progress if progress >= 15 else 15
 
     return compositions
