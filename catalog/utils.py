@@ -1,23 +1,6 @@
 from collections import Counter
 
 
-def get_full_name(compositions):
-    for composition in compositions:
-        if composition.type == 'movie':
-            composition.full_name = composition.name + ', ' + str(composition.year)
-            composition.full_name_eng = composition.name_eng
-            continue
-
-        if composition.id_group is None:
-            composition.full_name = composition.name + ', ' + str(composition.year)
-            composition.full_name_eng = composition.name_eng
-        else:
-            composition.full_name = composition.name + ' ' + str(composition.season) + ', ' + str(composition.year)
-            composition.full_name_eng = composition.name_eng + ' ' + str(composition.season)
-
-    return compositions
-
-
 def get_current_to_watch(compositions_to_watch, compositions_in_process=None):
     if compositions_in_process:
         groups_in_process = {composition.id_group for composition in compositions_in_process if composition.id_group}
@@ -36,11 +19,3 @@ def get_current_to_watch(compositions_to_watch, compositions_in_process=None):
                 )
 
     return compositions_to_watch, compositions_in_process
-
-
-def get_progress_percentage(compositions):
-    for composition in compositions:
-        progress = int(composition.last_watched / composition.episodes * 100)
-        composition.progress = progress if progress >= 15 else 15
-
-    return compositions

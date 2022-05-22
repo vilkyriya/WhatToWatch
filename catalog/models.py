@@ -2,6 +2,7 @@ from autoslug import AutoSlugField
 from autoslug.settings import slugify
 from django.db import models
 from django.shortcuts import reverse
+from django.utils.functional import cached_property
 
 
 def get_season(type, year, id_group):
@@ -102,6 +103,28 @@ class Composition(models.Model):
         return reverse("composition", kwargs={
             'slug': self.slug
         })
+
+    @cached_property
+    def full_name(self):
+        if self.type != 'movie' and self.id_group:
+            return f'{self.name} {self.season}, {self.year}'
+
+        return f'{self.name}, {self.year}'
+
+    @cached_property
+    def full_name_eng(self):
+        if self.type != 'movie' and self.id_group:
+            return f'{self.name_eng} {self.season}'
+
+        return self.name_eng
+
+    @cached_property
+    def progress(self):
+        if self.type == 'movie':
+            return None
+
+        progress = int(self.last_watched / self.episodes * 100)
+        return progress if progress >= 15 else 15
 
     def save(self, *args, **kwargs):
         if not self.season:
