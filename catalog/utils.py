@@ -1,21 +1,38 @@
-from collections import Counter
+import typing
+
+from django.db.models import QuerySet, Count
 
 
-def get_current_to_watch(compositions_to_watch, compositions_in_process=None):
+def get_current_to_watch(
+        compositions_to_watch: QuerySet,
+        compositions_in_process: typing.Optional[QuerySet] = None,
+) -> typing.Tuple[QuerySet, QuerySet]:
     if compositions_in_process:
-        groups_in_process = {composition.id_group for composition in compositions_in_process if composition.id_group}
+        groups_in_process = compositions_in_process.filter(id_group__isnull=False).values_list('id_group', flat=True)
 
         compositions_to_watch = compositions_to_watch.exclude(id_group__in=groups_in_process)
 
-    unique_group_counter = Counter([composition.id_group for composition in compositions_to_watch
-                                    if composition.id_group is not None])
+    unique_group_counter = compositions_to_watch.filter(
+        id_group__isnull=False,
+    ).values(
+        'id_group',
+    ).annotate(
+        id_group_count=Count('id_group'),
+    ).filter(
+        id_group_count__gt=1,
+    ).order_by()
 
+    exclude_composition_ids = list()
     for group in unique_group_counter:
-        if unique_group_counter[group] > 1:
-            exclude_compositions = list(compositions_to_watch.filter(id_group=group).order_by('year'))[1:]
-            for composition in exclude_compositions:
-                compositions_to_watch = compositions_to_watch.exclude(
-                    id_composition=composition.id_composition
-                )
+        exclude_composition_ids.extend(tuple(compositions_to_watch.filter(
+            id_group=group['id_group'],
+        ).order_by(
+            'year',
+        ).values_list(
+            'id_composition',
+            flat=True,
+        )[1:]))
+
+    compositions_to_watch.exclude(id_composition__in=exclude_composition_ids)
 
     return compositions_to_watch, compositions_in_process

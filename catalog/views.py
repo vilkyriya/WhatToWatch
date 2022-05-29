@@ -20,6 +20,7 @@ class HomePageView(ListView):
 
         all_to_watch = all.filter(status='to_watch')
         all_in_process = all.filter(status='in_process')
+        all_to_watch, all_in_process = get_current_to_watch(all_to_watch, all_in_process)
 
         movies_to_watch = all.filter(type='movie', status='to_watch')
         movies_to_watch, _ = get_current_to_watch(movies_to_watch)
@@ -123,10 +124,7 @@ class CompositionView(DetailView):
             messages.warning(self.request, 'Ошибка. Попробуйте еще раз')
             return redirect('home')
 
-        if composition.type == 'movie':
-            messages.success(self.request, f'Рейтинг "{composition}" обновлён')
-        else:
-            messages.success(self.request, f'Рейтинг "{composition} {composition.season}" обновлён')
+        messages.success(self.request, f'Рейтинг "{composition.full_name}" обновлён')
         return redirect('composition', slug=kwargs['slug'])
 
 
@@ -152,5 +150,8 @@ def change_watched_episodes(request, **kwargs):
         messages.warning(request, 'Ошибка. Попробуйте еще раз')
         return redirect('home')
 
-    messages.success(request, f'Последняя просмотренная серия "{composition} {composition.season}" обновлена')
+    messages.success(
+        request,
+        f'Последняя просмотренная серия "{composition.full_name}" обновлена на {composition.last_watched}',
+    )
     return redirect('composition', slug=kwargs['slug'])
