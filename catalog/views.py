@@ -16,30 +16,32 @@ class HomePageView(ListView):
     model = Composition
 
     def get_context_data(self, **kwargs):
-        movies_to_watch = Composition.objects.filter(type='movie', status='to_watch').order_by('?')
+        all = Composition.objects.order_by('year', 'name')
+
+        all_to_watch = all.filter(status='to_watch')
+        all_in_process = all.filter(status='in_process')
+        all_to_watch, all_in_process = get_current_to_watch(all_to_watch, all_in_process)
+
+        movies_to_watch = all.filter(type='movie', status='to_watch')
         movies_to_watch, _ = get_current_to_watch(movies_to_watch)
-        movies_to_watch = get_full_name(movies_to_watch)
 
-        series_to_watch = Composition.objects.filter(type='series', status='to_watch').order_by('?')
-        series_in_process = Composition.objects.filter(type='series', status='in_process').order_by('?')
+        series_to_watch = all.filter(type='series', status='to_watch')
+        series_in_process = all.filter(type='series', status='in_process')
         series_to_watch, series_in_process = get_current_to_watch(series_to_watch, series_in_process)
-        series_to_watch = get_full_name(series_to_watch)
-        series_in_process = get_full_name(series_in_process)
-        series_in_process = get_progress_percentage(series_in_process)
 
-        shows_to_watch = Composition.objects.filter(type='show', status='to_watch').order_by('?')
-        shows_in_process = Composition.objects.filter(type='show', status='in_process').order_by('?')
+        shows_to_watch = all.filter(type='show', status='to_watch')
+        shows_in_process = all.filter(type='show', status='in_process')
         shows_to_watch, shows_in_process = get_current_to_watch(shows_to_watch, shows_in_process)
-        shows_to_watch = get_full_name(shows_to_watch)
-        shows_in_process = get_full_name(shows_in_process)
-        shows_in_process = get_progress_percentage(shows_in_process)
 
-        context = {'movies_to_watch': movies_to_watch,
-                   'series_to_watch': series_to_watch,
-                   'series_in_process': series_in_process,
-                   'shows_to_watch': shows_to_watch,
-                   'shows_in_process': shows_in_process,
-                   }
+        context = {
+            'all_to_watch': all_to_watch,
+            'all_in_process': all_in_process,
+            'movies_to_watch': movies_to_watch,
+            'series_to_watch': series_to_watch,
+            'series_in_process': series_in_process,
+            'shows_to_watch': shows_to_watch,
+            'shows_in_process': shows_in_process,
+        }
         return context
 
 
@@ -63,7 +65,6 @@ class CatalogPageView(ListView):
         paginator = Paginator(seriesfilter.qs.order_by('name'), self.paginate_by)
         page_number = self.request.GET.get('page')
         page_obj = paginator.get_page(page_number)
-        page_obj = get_full_name(page_obj)
 
         context = {'compositions': page_obj, 'page_obj': page_obj, 'filter': seriesfilter, 'type': self.kwargs['type']}
         return context
@@ -94,11 +95,8 @@ class CompositionView(DetailView):
 
         if composition.id_group:
             group = Composition.objects.filter(id_group=composition.id_group).order_by('year')
-            group = get_full_name(group)
         else:
             group = []
-
-        composition = get_full_name([composition, ])[0]
 
         context = {
             'composition': composition,
@@ -126,10 +124,7 @@ class CompositionView(DetailView):
             messages.warning(self.request, 'Ошибка. Попробуйте еще раз')
             return redirect('home')
 
-        if composition.type == 'movie':
-            messages.success(self.request, f'Рейтинг "{composition}" обновлён')
-        else:
-            messages.success(self.request, f'Рейтинг "{composition} {composition.season}" обновлён')
+        messages.success(self.request, f'Рейтинг "{composition.full_name}" обновлён')
         return redirect('composition', slug=kwargs['slug'])
 
 
@@ -155,5 +150,8 @@ def change_watched_episodes(request, **kwargs):
         messages.warning(request, 'Ошибка. Попробуйте еще раз')
         return redirect('home')
 
-    messages.success(request, f'Последняя просмотренная серия "{composition} {composition.season}" обновлена')
+    messages.success(
+        request,
+        f'Последняя просмотренная серия "{composition.full_name}" обновлена на {composition.last_watched}',
+    )
     return redirect('composition', slug=kwargs['slug'])
