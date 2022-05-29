@@ -1,4 +1,4 @@
-/venv/
+﻿/venv/
 /.idea/
 
 # Text backup files
@@ -9,3 +9,5 @@
 
 Пароли.txt
 Heroku.txt
+
+/catalog/fixtures/
