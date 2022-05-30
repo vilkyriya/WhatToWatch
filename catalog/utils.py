@@ -3,7 +3,7 @@ import typing
 from django.db.models import QuerySet, Count
 
 
-def get_current_to_watch(
+def select_unique_to_watch(
         compositions_to_watch: QuerySet,
         compositions_in_process: typing.Optional[QuerySet] = None,
 ) -> typing.Tuple[QuerySet, QuerySet]:
@@ -25,6 +25,7 @@ def get_current_to_watch(
     exclude_composition_ids = list()
     for group in unique_group_counter:
         exclude_composition_ids.extend(tuple(compositions_to_watch.filter(
+            status='to_watch',
             id_group=group['id_group'],
         ).order_by(
             'year',
@@ -33,6 +34,6 @@ def get_current_to_watch(
             flat=True,
         )[1:]))
 
-    compositions_to_watch.exclude(id_composition__in=exclude_composition_ids)
+    compositions_to_watch = compositions_to_watch.exclude(id_composition__in=exclude_composition_ids)
 
     return compositions_to_watch, compositions_in_process
