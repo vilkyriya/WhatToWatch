@@ -20,18 +20,18 @@ class HomePageView(ListView):
 
         all_to_watch = all.filter(status='to_watch')
         all_in_process = all.filter(status='in_process')
-        all_to_watch, all_in_process = get_current_to_watch(all_to_watch, all_in_process)
+        all_to_watch, all_in_process = select_unique_to_watch(all_to_watch, all_in_process)
 
         movies_to_watch = all.filter(type='movie', status='to_watch')
-        movies_to_watch, _ = get_current_to_watch(movies_to_watch)
+        movies_to_watch, _ = select_unique_to_watch(movies_to_watch)
 
         series_to_watch = all.filter(type='series', status='to_watch')
         series_in_process = all.filter(type='series', status='in_process')
-        series_to_watch, series_in_process = get_current_to_watch(series_to_watch, series_in_process)
+        series_to_watch, series_in_process = select_unique_to_watch(series_to_watch, series_in_process)
 
         shows_to_watch = all.filter(type='show', status='to_watch')
         shows_in_process = all.filter(type='show', status='in_process')
-        shows_to_watch, shows_in_process = get_current_to_watch(shows_to_watch, shows_in_process)
+        shows_to_watch, shows_in_process = select_unique_to_watch(shows_to_watch, shows_in_process)
 
         context = {
             'all_to_watch': all_to_watch,
