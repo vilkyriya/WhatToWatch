@@ -40,9 +40,4 @@ class Migration(migrations.Migration):
             move_url_doramatv_to_url_to_watch,
             migrations.RunPython.noop,
         ),
-        migrations.AddField(
-            model_name='composition',
-            name='to_ignore',
-            field=models.BooleanField(default=False, verbose_name='Игнорировать', blank=True, null=True,),
-        ),
     ]
