@@ -6,14 +6,16 @@ from catalog.models import Composition, Group
 @admin.register(Composition)
 class CompositionAdmin(admin.ModelAdmin):
     list_display = ('name', 'name_eng', 'year', 'type', 'season', 'rating_my',)
-    list_filter = ('status', 'type',)
+    list_filter = ('status', 'type', 'to_ignore',)
     list_editable = ('rating_my',)
     search_fields = ('name', 'name_eng', 'slug',)
     raw_id_fields = ('id_group',)
 
     fieldsets = (
         ('Общие параметры', {
-            'fields': ('type', 'name', 'name_eng', 'year', 'url_kinopoisk', 'url_doramatv', 'id_group', 'status',)
+            'fields': (
+                'type', 'name', 'name_eng', 'year', 'url_info', 'url_to_watch', 'id_group', 'status', 'to_ignore',
+            )
         }),
         ('Параметры для сериалов и шоу', {
             'classes': ('collapse',),

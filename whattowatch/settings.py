@@ -87,7 +87,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'whattowatchdb',
         'USER': 'whattowatchadmin',
-        'PASSWORD': 'whattowatchpassword',
+        'PASSWORD': 'wwMYgd01wtSQsh69@',
         'HOST': 'localhost',
         'PORT': '3306',
     }
