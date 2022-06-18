@@ -6,7 +6,7 @@ from catalog.models import Composition, Group
 @admin.register(Composition)
 class CompositionAdmin(admin.ModelAdmin):
     list_display = ('name', 'name_eng', 'year', 'type', 'season', 'rating_my',)
-    list_filter = ('status', 'type',)
+    list_filter = ('status', 'type', 'to_ignore',)
     list_editable = ('rating_my',)
     search_fields = ('name', 'name_eng', 'slug',)
     raw_id_fields = ('id_group',)
