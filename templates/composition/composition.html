@@ -1,96 +1,113 @@
 {% extends "base.html" %}
 
-{% block head_title %}{{composition.full_name}}{% endblock %}
+{% block head_title %}{{ composition.full_name }}{% endblock %}
 
 {% load mathfilters %}
 {% load crispy_forms_tags %}
 
 {% block content %}
 
-<div class="card border-light mb-3 col-lg-4" style="min-width: 45rem;">
-    <div class="card-body">
-        <table class="table table-hover">
-            <tbody>
+    <div class="card border-light mb-3 col-lg-4" style="min-width: 45rem;">
+        <div class="card-body">
+            <table class="table table-hover">
+                <tbody>
                 <tr>
-                    <th colspan="2"><h5><strong>{{composition.name}}</strong></h5>
-                    {{ composition.name_eng|default_if_none:"Не указано"}}</th>
+                    <th colspan="2"><h5><strong>{{ composition.name }}</strong></h5>
+                        {{ composition.name_eng|default_if_none:"Не указано" }}</th>
                 </tr>
 
                 <tr>
                     <td>Год</td>
-                    <td>{{composition.year}}</td>
+                    <td>{{ composition.year }}</td>
                 </tr>
 
                 {% if composition.type == "series" or composition.type == "show" %}
-                <tr>
-                    <td>Сезон</td>
-                    <td>{{composition.season}}</td>
-                </tr>
-                <tr>
-                    <td>Эпизоды</td>
-                    <td>
-                        <div class="btn-toolbar" role="toolbar">
-                            {% for height in composition.height %}
-                            <div class="btn-group mr-2 episode-group" role="group" >
-                                {% for width in composition.width %}
-                                {% with height|mul:10|add:width as cur_ep %}
-                                    {% if cur_ep <= composition.last_watched %}
-                                        <a type="button" class="btn btn-secondary episode"
-                                           href="{% url 'change-watched-episodes' slug=composition.slug episode=cur_ep %}">
-                                            {{ cur_ep }}</a>
-                                    {% elif cur_ep <= composition.episodes%}
-                                        <a type="button" class="btn btn-outline-secondary episode"
-                                           href="{% url 'change-watched-episodes' slug=composition.slug episode=cur_ep %}">
-                                            {{ cur_ep }}</a>
-                                    {% endif %}
-                                {% endwith%}
+                    <tr>
+                        <td>Сезон</td>
+                        <td>{{ composition.season }}</td>
+                    </tr>
+                    <tr>
+                        <td>Эпизоды</td>
+                        <td>
+                            <div class="btn-toolbar" role="toolbar">
+                                {% for height in composition.height %}
+                                    <div class="btn-group mr-2 episode-group" role="group">
+                                        {% for width in composition.width %}
+                                            {% with height|mul:10|add:width as cur_ep %}
+                                                {% if cur_ep <= composition.last_watched %}
+                                                    <a type="button" class="btn btn-secondary episode"
+                                                       href="{% url 'change-watched-episodes' slug=composition.slug episode=cur_ep %}">
+                                                        {{ cur_ep }}</a>
+                                                {% elif cur_ep <= composition.episodes %}
+                                                    <a type="button" class="btn btn-outline-secondary episode"
+                                                       href="{% url 'change-watched-episodes' slug=composition.slug episode=cur_ep %}">
+                                                        {{ cur_ep }}</a>
+                                                {% endif %}
+                                            {% endwith %}
+                                        {% endfor %}
+                                    </div>
                                 {% endfor %}
                             </div>
-                            {% endfor %}
-                        </div>
-                    </td>
-                </tr>
+                        </td>
+                    </tr>
                 {% endif %}
 
-                {% if composition.url_kinopoisk %}
-                <tr>
-                    <td>Кинопоиск</td>
-                    <td><a href="{{composition.url_kinopoisk}}">{{composition.url_kinopoisk}}</a></td>
-                </tr>
+                {% if composition.url_info %}
+                    <tr>
+                        <td>Кинопоиск</td>
+                        <td><a href="{{ composition.url_info }}">{{ composition.url_info }}</a></td>
+                    </tr>
                 {% endif %}
 
-                {% if composition.url_doramatv %}
-                <tr>
-                    <td>ДорамаТВ</td>
-                    <td><a href="{{composition.url_doramatv}}">{{composition.url_doramatv}}</a></td>
-                </tr>
+                {% if composition.url_to_watch %}
+                    <tr>
+                        <td>ДорамаТВ</td>
+                        <td><a href="{{ composition.url_to_watch }}">{{ composition.url_to_watch }}</a></td>
+                    </tr>
                 {% endif %}
 
                 <tr>
                     {% if composition.last_watched == composition.episodes or composition.type == "movie" %}
-                    <td>Мой рейтинг</td>
-                    <td>
-                        <form method='POST' >
-                        {% csrf_token %}
-                            {{ form.rating_my|as_crispy_field }}
-                            <input class="btn btn-outline-success" type="submit" value="Оценить" />
-                        </form>
-                    </td>
+                        <td>Мой рейтинг</td>
+                        <td>
+                            <form method='POST'>
+                                {% csrf_token %}
+                                {{ form.rating_my|as_crispy_field }}
+                                <input class="btn btn-outline-success" type="submit" value="Оценить"/>
+                            </form>
+                        </td>
                     {% endif %}
                 </tr>
-            </tbody>
-        </table>
+
+                <tr>
+                    <td>Игнорировать</td>
+                    <td>
+                        {% if composition.to_ignore %}
+                            <a type="button" class="btn btn-outline-success"
+                               href="{% url 'change-to-ignored' slug=composition.slug is_ignored=0 %}">
+                                ✗
+                            </a>
+                        {% else %}
+                            <a type="button" class="btn btn-outline-danger"
+                               href="{% url 'change-to-ignored' slug=composition.slug is_ignored=1 %}">
+                                ✔
+                            </a>
+                        {% endif %}
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
-</div>
 
-{% if group_show %}
+    {% if group_show %}
 
-<!--костыль чтобы между информацией и группой было место-->
-<div class="card border-light mb-3 col-lg-4" style="max-width: 5rem;">
-</div>
+        <!--костыль чтобы между информацией и группой было место-->
+        <div class="card border-light mb-3 col-lg-4" style="max-width: 5rem;">
+        </div>
 
-{% include "composition/group.html" %}
+        {% include "composition/group.html" %}
 
-{% endif %}
+    {% endif %}
 
 {% endblock %}

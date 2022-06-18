@@ -4,6 +4,8 @@ from django.db import models
 from django.shortcuts import reverse
 from django.utils.functional import cached_property
 
+from . import constants
+
 
 def get_season(type, year, id_group):
     if type == "movie":
@@ -35,52 +37,92 @@ class Group(models.Model):
 
 
 class Composition(models.Model):
-    TYPE_CHOICES = (
-        ('not_defined', 'Не выбрано'),
-        ('movie', 'Фильм'),
-        ('series', 'Сериал'),
-        ('show', 'Шоу'),
+    id_composition = models.AutoField(
+        primary_key=True,
     )
-
-    STATUS_CHOICES = (
-        ('to_watch', 'Посмотреть'),
-        ('in_process', 'В процессе'),
-        ('watched', 'Завершён'),
-    )
-
-    id_composition = models.AutoField(primary_key=True)
-
     type = models.CharField(
         verbose_name="Тип",
         max_length=50,
-        choices=TYPE_CHOICES,
-        default=TYPE_CHOICES[0][0]
+        choices=constants.CompositionTypes.CHOICES,
+        default=constants.CompositionTypes.NOT_DEFINED,
+    )
+    name = models.CharField(
+        max_length=250,
+        verbose_name='Название',
+        default='',
+    )
+    name_eng = models.CharField(
+        max_length=250,
+        verbose_name='Английское название',
+        blank=False,
+        null=False,
+    )
+    slug = models.SlugField(
+        blank=True,
+        null=True,
     )
 
-    name = models.CharField(max_length=100, verbose_name='Название', default='')
-    name_eng = models.CharField(max_length=100, verbose_name='Английское название', blank=False, null=False)
-
-    slug = models.SlugField(blank=True, null=True)
-
     # Это для сериалов и шоу
-    season = models.IntegerField(verbose_name='Сезон', blank=True, null=True)
-    episodes = models.IntegerField(verbose_name='Эпизоды', blank=True, null=True)
-    last_watched = models.IntegerField(verbose_name='Последний просмотренный', blank=True, null=True)
+    season = models.IntegerField(
+        verbose_name='Сезон',
+        blank=True,
+        null=True,
+    )
+    episodes = models.IntegerField(
+        verbose_name='Эпизоды',
+        blank=True,
+        null=True,
+    )
+    last_watched = models.IntegerField(
+        verbose_name='Последний просмотренный',
+        blank=True,
+        null=True,
+    )
 
-    year = models.IntegerField(verbose_name='Год выпуска', blank=False, null=False)
+    year = models.IntegerField(
+        verbose_name='Год выпуска',
+        blank=False,
+        null=False,
+    )
 
-    rating_my = models.FloatField(verbose_name='Мой рейтинг', default=0, blank=True, null=True)
+    rating_my = models.FloatField(
+        verbose_name='Мой рейтинг',
+        default=0,
+        blank=True,
+        null=True,
+    )
 
-    url_kinopoisk = models.CharField(max_length=100, verbose_name='Кинопоиск', blank=True, null=True)
-    url_doramatv = models.CharField(max_length=100, verbose_name='ДорамаТВ', blank=True, null=True)
+    url_info = models.CharField(
+        max_length=100,
+        verbose_name='Инфо',
+        blank=True,
+        null=True,
+    )
+    url_to_watch = models.CharField(
+        max_length=100,
+        verbose_name='Где посмотреть',
+        blank=True,
+        null=True,
+    )
 
-    id_group = models.ForeignKey(Group, models.SET_NULL, verbose_name='Группа', blank=True, null=True)
+    id_group = models.ForeignKey(
+        to=Group,
+        on_delete=models.SET_NULL,
+        verbose_name='Группа',
+        blank=True,
+        null=True,
+    )
 
     status = models.CharField(
         verbose_name="Статус",
         max_length=50,
-        choices=STATUS_CHOICES,
-        default=STATUS_CHOICES[0][0]
+        choices=constants.CompositionStatuses.CHOICES,
+        default=constants.CompositionStatuses.TO_WATCH,
+    )
+
+    to_ignore = models.BooleanField(
+        verbose_name='Игнорировать',
+        default=False,
     )
 
     class Meta:

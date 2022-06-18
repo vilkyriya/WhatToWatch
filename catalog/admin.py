@@ -13,7 +13,9 @@ class CompositionAdmin(admin.ModelAdmin):
 
     fieldsets = (
         ('Общие параметры', {
-            'fields': ('type', 'name', 'name_eng', 'year', 'url_kinopoisk', 'url_doramatv', 'id_group', 'status',)
+            'fields': (
+                'type', 'name', 'name_eng', 'year', 'url_info', 'url_to_watch', 'id_group', 'status', 'to_ignore',
+            )
         }),
         ('Параметры для сериалов и шоу', {
             'classes': ('collapse',),

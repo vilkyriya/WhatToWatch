@@ -3,86 +3,107 @@
 {% block head_title %}Главная{% endblock %}
 
 {% block content %}
-<div class="card border-light mb-3 col-lg-4" style="min-width: 75rem;">
-    <ul class="nav nav-tabs justify-content-center">
-        <li class="nav-item" style="min-width: 15rem; text-align: center;">
-            <a class="nav-link active" data-toggle="tab" href="#all"><h5>Все</h5></a>
-        </li>
-        <li class="nav-item" style="min-width: 15rem; text-align: center;">
-            <a class="nav-link" data-toggle="tab" href="#movies"><h5>Фильмы</h5></a>
-        </li>
-        <li class="nav-item" style="min-width: 15rem; text-align: center;">
-            <a class="nav-link" data-toggle="tab" href="#series"><h5>Сериалы</h5></a>
-        </li>
-        <li class="nav-item" style="min-width: 15rem; text-align: center;">
-            <a class="nav-link" data-toggle="tab" href="#shows"><h5>Шоу</h5></a>
-        </li>
-    </ul>
-    <div id="myTabContent" class="tab-content">
-        <div class="tab-pane fade active show" id="all">
-            {% if all_in_process %}
-            <div class="card-body table-responsive">
-                <h3>Досмотреть</h3>
-                <div class="row" align="center">
-                    {% include "home_section.html" with compositions=all_in_process %}
-                </div>
+    <div class="card border-light mb-3 col-lg-4" style="min-width: 75rem;">
+        <ul class="nav nav-tabs justify-content-center">
+            <li class="nav-item" style="min-width: 10rem; text-align: center;">
+                <a class="nav-link active" data-toggle="tab" href="#compositions"><h5>Все</h5></a>
+            </li>
+            <li class="nav-item" style="min-width: 10rem; text-align: center;">
+                <a class="nav-link" data-toggle="tab" href="#movies"><h5>Фильмы</h5></a>
+            </li>
+            <li class="nav-item" style="min-width: 10rem; text-align: center;">
+                <a class="nav-link" data-toggle="tab" href="#series"><h5>Сериалы</h5></a>
+            </li>
+            <li class="nav-item" style="min-width: 10rem; text-align: center;">
+                <a class="nav-link" data-toggle="tab" href="#shows"><h5>Шоу</h5></a>
+            </li>
+            <li class="nav-item" style="min-width: 10rem; text-align: center;">
+                <a class="nav-link" data-toggle="tab" href="#ignored"><h5>Игнорируемые</h5></a>
+            </li>
+        </ul>
+        <div id="myTabContent" class="tab-content">
+            <div class="tab-pane fade active show" id="compositions">
+                {% if compositions_in_process %}
+                    <div class="card-body table-responsive">
+                        <h3>Досмотреть</h3>
+                        <div class="row" align="center">
+                            {% include "home_section.html" with compositions=compositions_in_process %}
+                        </div>
+                    </div>
+                {% endif %}
+                {% if compositions_to_watch %}
+                    <div class="card-body table-responsive">
+                        <h3>Что-то новое</h3>
+                        <div class="row" align="center">
+                            {% include "home_section.html" with compositions=compositions_to_watch %}
+                        </div>
+                    </div>
+                {% endif %}
             </div>
-            {% endif %}
-            {% if all_to_watch %}
-            <div class="card-body table-responsive">
-                <h3>Что-то новое</h3>
-                <div class="row" align="center">
-                    {% include "home_section.html" with compositions=all_to_watch %}
-                </div>
+            <div class="tab-pane fade" id="movies">
+                {% if movies_to_watch %}
+                    <div class="card-body table-responsive">
+                        <h3>Что-то новое</h3>
+                        <div class="row" align="center">
+                            {% include "home_section.html" with compositions=movies_to_watch %}
+                        </div>
+                    </div>
+                {% endif %}
             </div>
-            {% endif %}
-        </div>
-        <div class="tab-pane fade" id="movies">
-            {% if movies_to_watch %}
-            <div class="card-body table-responsive">
-                <h3>Что-то новое</h3>
-                <div class="row" align="center">
-                    {% include "home_section.html" with compositions=movies_to_watch %}
-                </div>
+            <div class="tab-pane fade" id="series">
+                {% if series_in_process %}
+                    <div class="card-body table-responsive">
+                        <h3>Досмотреть</h3>
+                        <div class="row" align="center">
+                            {% include "home_section.html" with compositions=series_in_process %}
+                        </div>
+                    </div>
+                {% endif %}
+                {% if series_to_watch %}
+                    <div class="card-body table-responsive">
+                        <h3>Что-то новое</h3>
+                        <div class="row" align="center">
+                            {% include "home_section.html" with compositions=series_to_watch %}
+                        </div>
+                    </div>
+                {% endif %}
             </div>
-            {% endif %}
-        </div>
-        <div class="tab-pane fade" id="series">
-            {% if series_in_process %}
-            <div class="card-body table-responsive">
-                <h3>Досмотреть</h3>
-                <div class="row" align="center">
-                    {% include "home_section.html" with compositions=series_in_process %}
-                </div>
+            <div class="tab-pane fade" id="shows">
+                {% if shows_in_process %}
+                    <div class="card-body table-responsive">
+                        <h3>Досмотреть</h3>
+                        <div class="row" align="center">
+                            {% include "home_section.html" with compositions=shows_in_process %}
+                        </div>
+                    </div>
+                {% endif %}
+                {% if shows_to_watch %}
+                    <div class="card-body table-responsive">
+                        <h3>Что-то новое</h3>
+                        <div class="row" align="center">
+                            {% include "home_section.html" with compositions=shows_to_watch %}
+                        </div>
+                    </div>
+                {% endif %}
             </div>
-            {% endif %}
-            {% if series_to_watch %}
-            <div class="card-body table-responsive">
-                <h3>Что-то новое</h3>
-                <div class="row" align="center">
-                    {% include "home_section.html" with compositions=series_to_watch %}
-                </div>
+            <div class="tab-pane fade" id="ignored">
+                {% if ignored_in_process %}
+                    <div class="card-body table-responsive">
+                        <h3>Досмотреть</h3>
+                        <div class="row" align="center">
+                            {% include "home_section.html" with compositions=ignored_in_process %}
+                        </div>
+                    </div>
+                {% endif %}
+                {% if ignored_to_watch %}
+                    <div class="card-body table-responsive">
+                        <h3>Что-то новое</h3>
+                        <div class="row" align="center">
+                            {% include "home_section.html" with compositions=ignored_to_watch %}
+                        </div>
+                    </div>
+                {% endif %}
             </div>
-            {% endif %}
-        </div>
-        <div class="tab-pane fade" id="shows">
-            {% if shows_in_process %}
-            <div class="card-body table-responsive">
-                <h3>Досмотреть</h3>
-                <div class="row" align="center">
-                    {% include "home_section.html" with compositions=shows_in_process %}
-                </div>
-            </div>
-            {% endif %}
-            {% if shows_to_watch %}
-            <div class="card-body table-responsive">
-                <h3>Что-то новое</h3>
-                <div class="row" align="center">
-                    {% include "home_section.html" with compositions=shows_to_watch %}
-                </div>
-            </div>
-            {% endif %}
         </div>
     </div>
-</div>
 {% endblock %}

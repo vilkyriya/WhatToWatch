@@ -16,31 +16,42 @@ class HomePageView(ListView):
     model = Composition
 
     def get_context_data(self, **kwargs):
-        all = Composition.objects.order_by('year', 'name')
+        compositions = Composition.objects.order_by('year', 'name')
 
-        all_to_watch = all.filter(status='to_watch')
-        all_in_process = all.filter(status='in_process')
-        all_to_watch, all_in_process = select_unique_to_watch(all_to_watch, all_in_process)
+        ignored = compositions.filter(to_ignore=True)
+        ignored_to_watch = ignored.filter(status='to_watch')
+        ignored_in_process = ignored.filter(status='in_process')
+        ignored_to_watch, ignored_in_process = select_unique_to_watch(ignored_to_watch, ignored_in_process)
 
-        movies_to_watch = all.filter(type='movie', status='to_watch')
+        compositions = compositions.filter(to_ignore=False)
+
+        compositions_to_watch = compositions.filter(status='to_watch')
+        compositions_in_process = compositions.filter(status='in_process')
+        compositions_to_watch, compositions_in_process = select_unique_to_watch(
+            compositions_to_watch, compositions_in_process,
+        )
+
+        movies_to_watch = compositions.filter(type='movie', status='to_watch')
         movies_to_watch, _ = select_unique_to_watch(movies_to_watch)
 
-        series_to_watch = all.filter(type='series', status='to_watch')
-        series_in_process = all.filter(type='series', status='in_process')
+        series_to_watch = compositions.filter(type='series', status='to_watch')
+        series_in_process = compositions.filter(type='series', status='in_process')
         series_to_watch, series_in_process = select_unique_to_watch(series_to_watch, series_in_process)
 
-        shows_to_watch = all.filter(type='show', status='to_watch')
-        shows_in_process = all.filter(type='show', status='in_process')
+        shows_to_watch = compositions.filter(type='show', status='to_watch')
+        shows_in_process = compositions.filter(type='show', status='in_process')
         shows_to_watch, shows_in_process = select_unique_to_watch(shows_to_watch, shows_in_process)
 
         context = {
-            'all_to_watch': all_to_watch,
-            'all_in_process': all_in_process,
+            'compositions_to_watch': compositions_to_watch,
+            'compositions_in_process': compositions_in_process,
             'movies_to_watch': movies_to_watch,
             'series_to_watch': series_to_watch,
             'series_in_process': series_in_process,
             'shows_to_watch': shows_to_watch,
             'shows_in_process': shows_in_process,
+            'ignored_in_process': ignored_in_process,
+            'ignored_to_watch': ignored_to_watch,
         }
         return context
 
@@ -154,4 +165,27 @@ def change_watched_episodes(request, **kwargs):
         request,
         f'Последняя просмотренная серия "{composition.full_name}" обновлена на {composition.last_watched}',
     )
+    return redirect('composition', slug=kwargs['slug'])
+
+
+def change_to_ignored(request, **kwargs):
+    composition = get_object_or_404(Composition, slug=kwargs['slug'])
+    is_ignored = bool(int(kwargs['is_ignored']))
+
+    if composition.to_ignore == is_ignored:
+        return redirect('composition', slug=kwargs['slug'])
+
+    try:
+        composition.to_ignore = is_ignored
+        composition.save()
+    except IntegrityError:
+        messages.warning(request, 'Ошибка. Попробуйте еще раз')
+        return redirect('home')
+
+    if is_ignored:
+        message = 'Добавлено в игнорируемые'
+    else:
+        message = 'Удалено из игнорируемых'
+
+    messages.success(request, message)
     return redirect('composition', slug=kwargs['slug'])

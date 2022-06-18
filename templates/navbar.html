@@ -31,22 +31,22 @@
             <!-- Right -->
             <ul class="navbar-nav nav-flex-icons">
                 {% if not request.user.is_authenticated %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'login' %}">
-                        <span> Войти </span>
-                    </a>
-                </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'login' %}">
+                            <span> Войти </span>
+                        </a>
+                    </li>
                 {% else %}
-                <li class="nav-item">
-                    <a class="nav-link" href="/admin/">
-                        <span> Панель администратора </span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'logout' %}">
-                        <span> Выйти </span>
-                    </a>
-                </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/">
+                            <span> Панель администратора </span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'logout' %}">
+                            <span> Выйти </span>
+                        </a>
+                    </li>
                 {% endif %}
             </ul>
         </div>
