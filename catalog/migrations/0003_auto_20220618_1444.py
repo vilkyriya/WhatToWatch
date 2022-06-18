@@ -40,14 +40,6 @@ class Migration(migrations.Migration):
             move_url_doramatv_to_url_to_watch,
             migrations.RunPython.noop,
         ),
-        migrations.RemoveField(
-            model_name='composition',
-            name='url_kinopoisk',
-        ),
-        migrations.RemoveField(
-            model_name='composition',
-            name='url_doramatv',
-        ),
         migrations.AddField(
             model_name='composition',
             name='to_ignore',
