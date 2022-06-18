@@ -123,6 +123,8 @@ class Composition(models.Model):
     to_ignore = models.BooleanField(
         verbose_name='Игнорировать',
         default=False,
+        blank=True,
+        null=True,
     )
 
     class Meta:

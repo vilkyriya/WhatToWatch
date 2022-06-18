@@ -43,6 +43,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='composition',
             name='to_ignore',
-            field=models.BooleanField(default=False, verbose_name='Игнорировать'),
+            field=models.BooleanField(default=False, verbose_name='Игнорировать', blank=True, null=True,),
         ),
     ]
