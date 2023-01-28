@@ -1,14 +1,15 @@
 from django.contrib import messages
 from django.core.paginator import Paginator
 from django.db import IntegrityError
-from django.shortcuts import get_object_or_404
-from django.shortcuts import redirect
-from django.views.generic import ListView, DetailView
+from django.http import Http404
+from django.shortcuts import get_object_or_404, redirect, render
+from django.views.generic import DetailView, ListView
+from rest_framework import mixins, viewsets
 
-from catalog.models import Composition
 from .filter import MovieFilter, SeriesShowFilter
 from .forms import CompositionForm
 from .utils import *
+from . import serializers
 
 
 class HomePageView(ListView):
@@ -189,3 +190,27 @@ def change_to_ignored(request, **kwargs):
 
     messages.success(request, message)
     return redirect('composition', slug=kwargs['slug'])
+
+
+class CompositionViewSet(
+    mixins.RetrieveModelMixin,
+    mixins.UpdateModelMixin,
+    viewsets.GenericViewSet,
+):
+    queryset = Composition.objects.all()
+    template_name = 'composition/composition_v2.html'
+
+    def get_serializer_class(self):
+        if self.action == 'retrieve':
+            return serializers.CompositionRetrieveSerializer
+        if self.action == 'partial_update':
+            return serializers.CompositionPartialUpdateSerializer
+        raise Http404("Can't find action")
+
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance)
+        return render(request, self.template_name, serializer.data)
+
+    def partial_update(self, request, *args, **kwargs):
+        super().partial_update(request, *args, **kwargs)

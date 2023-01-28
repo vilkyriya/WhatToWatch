@@ -17,5 +17,10 @@ urlpatterns = [
         'change-to-ignored/<slug:slug>-<is_ignored>/',
         login_required(change_to_ignored),
         name='change-to-ignored',
-    )
+    ),
+    path(
+        'composition_v2/<int:pk>',
+        CompositionViewSet.as_view({'get': 'retrieve', 'patch': 'partial_update'}),
+        name='composition-v2',
+    ),
 ]

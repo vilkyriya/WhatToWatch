@@ -7,21 +7,6 @@ from django.utils.functional import cached_property
 from . import constants
 
 
-def get_season(type, year, id_group):
-    if type == "movie":
-        return 0
-
-    if not id_group:
-        return 1
-
-    compositions = Composition.objects.filter(id_group=id_group, year__lt=year).order_by('year')
-
-    if len(compositions) == 0:
-        return 1
-    else:
-        return compositions.last().season + 1
-
-
 class Group(models.Model):
     id_group = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100, verbose_name='Название', blank=True, null=True)
@@ -60,6 +45,7 @@ class Composition(models.Model):
     slug = models.SlugField(
         blank=True,
         null=True,
+        unique=True,
     )
 
     # Это для сериалов и шоу
@@ -148,6 +134,9 @@ class Composition(models.Model):
             'slug': self.slug
         })
 
+    def get_absolute_url_v2(self):
+        return reverse("composition-v2", args=[self.id_composition])
+
     @cached_property
     def full_name(self):
         if self.type != 'movie' and self.id_group:
@@ -171,6 +160,8 @@ class Composition(models.Model):
         return progress if progress >= 15 else 15
 
     def save(self, *args, **kwargs):
+        from .utils import get_season
+
         if not self.season:
             self.season = get_season(self.type, self.year, self.id_group)
 

@@ -2,6 +2,8 @@ import typing
 
 from django.db.models import QuerySet, Count
 
+from catalog.models import Composition
+
 
 def select_unique_to_watch(
         compositions_to_watch: QuerySet,
@@ -37,3 +39,18 @@ def select_unique_to_watch(
     compositions_to_watch = compositions_to_watch.exclude(id_composition__in=exclude_composition_ids)
 
     return compositions_to_watch, compositions_in_process
+
+
+def get_season(type, year, id_group):
+    if type == "movie":
+        return 0
+
+    if not id_group:
+        return 1
+
+    compositions = Composition.objects.filter(id_group=id_group, year__lt=year).order_by('year')
+
+    if len(compositions) == 0:
+        return 1
+    else:
+        return compositions.last().season + 1
