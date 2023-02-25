@@ -22,22 +22,24 @@
                     </td>
                 </tr>
             {% endfor %}
-            <tr>
-                <td>Игнорировать</td>
-                <td>
-                    {% if to_ignore %}
-                        <a type="button" class="btn btn-outline-success"
-                           href="{% url 'change-to-ignored' pk=pk is_ignored=0 %}">
-                            ✗
-                        </a>
-                    {% else %}
-                        <a type="button" class="btn btn-outline-danger"
-                           href="{% url 'change-to-ignored' pk=pk is_ignored=1 %}">
-                            ✔
-                        </a>
-                    {% endif %}
-                </td>
-            </tr>
+            {% if status != 'watched' %}
+                <tr>
+                    <td>Игнорировать</td>
+                    <td>
+                        {% if to_ignore %}
+                            <a type="button" class="btn btn-outline-success"
+                               href="{% url 'change-to-ignored' pk=pk is_ignored=0 %}">
+                                ✗
+                            </a>
+                        {% else %}
+                            <a type="button" class="btn btn-outline-danger"
+                               href="{% url 'change-to-ignored' pk=pk is_ignored=1 %}">
+                                ✔
+                            </a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endif %}
             </tbody>
         </table>
 

@@ -26,13 +26,14 @@ class CompositionRetrieveSerializer(serializers.ModelSerializer):
     group = serializers.SerializerMethodField()
 
     rating_my = serializers.FloatField()
+    status = serializers.CharField()
 
     class Meta:
         model = Composition
         fields = (
             'pk', 'name', 'name_eng', 'full_name', 'year', 'type', 'season',
             'last_watched', 'slug', 'episodes', 'url_info', 'url_to_watch', 'to_ignore',
-            'height', 'width', 'group', 'rating_my',
+            'height', 'width', 'group', 'rating_my', 'status',
         )
 
     @staticmethod
