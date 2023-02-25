@@ -7,6 +7,7 @@ from .models import Composition
 
 
 class CompositionRetrieveSerializer(serializers.ModelSerializer):
+    pk = serializers.IntegerField()
     full_name = serializers.CharField()
     name = serializers.CharField()
     name_eng = serializers.CharField()
@@ -24,16 +25,14 @@ class CompositionRetrieveSerializer(serializers.ModelSerializer):
     width = serializers.SerializerMethodField()
     group = serializers.SerializerMethodField()
 
-    # rating_my = serializers.SerializerMethodField()
-    # form = serializers.SerializerMethodField()
+    rating_my = serializers.FloatField()
 
     class Meta:
         model = Composition
         fields = (
-            'name', 'name_eng', 'full_name', 'year', 'type', 'season',
+            'pk', 'name', 'name_eng', 'full_name', 'year', 'type', 'season',
             'last_watched', 'slug', 'episodes', 'url_info', 'url_to_watch', 'to_ignore',
-            'height', 'width', 'group',
-            # 'rating_my',
+            'height', 'width', 'group', 'rating_my',
         )
 
     @staticmethod

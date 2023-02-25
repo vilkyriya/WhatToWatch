@@ -130,12 +130,7 @@ class Composition(models.Model):
         return f'{self.name}'
 
     def get_absolute_url(self):
-        return reverse("composition", kwargs={
-            'slug': self.slug
-        })
-
-    def get_absolute_url_v2(self):
-        return reverse("composition-v2", args=[self.id_composition])
+        return reverse("composition", args=[self.id_composition])
 
     @cached_property
     def full_name(self):

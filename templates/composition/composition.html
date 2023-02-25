@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block head_title %}{{ composition.full_name }}{% endblock %}
+{% block head_title %}{{ full_name }}{% endblock %}
 
 {% load mathfilters %}
 {% load crispy_forms_tags %}
@@ -12,35 +12,35 @@
             <table class="table table-hover">
                 <tbody>
                 <tr>
-                    <th colspan="2"><h5><strong>{{ composition.name }}</strong></h5>
-                        {{ composition.name_eng|default_if_none:"Не указано" }}</th>
+                    <th colspan="2"><h5><strong>{{ name }}</strong></h5>
+                        {{ name_eng|default_if_none:"Не указано" }}</th>
                 </tr>
 
                 <tr>
                     <td>Год</td>
-                    <td>{{ composition.year }}</td>
+                    <td>{{ year }}</td>
                 </tr>
 
-                {% if composition.type == "series" or composition.type == "show" %}
+                {% if type == "series" or type == "show" %}
                     <tr>
                         <td>Сезон</td>
-                        <td>{{ composition.season }}</td>
+                        <td>{{ season }}</td>
                     </tr>
                     <tr>
                         <td>Эпизоды</td>
                         <td>
                             <div class="btn-toolbar" role="toolbar">
-                                {% for height in composition.height %}
+                                {% for height in height %}
                                     <div class="btn-group mr-2 episode-group" role="group">
-                                        {% for width in composition.width %}
+                                        {% for width in width %}
                                             {% with height|mul:10|add:width as cur_ep %}
-                                                {% if cur_ep <= composition.last_watched %}
+                                                {% if cur_ep <= last_watched %}
                                                     <a type="button" class="btn btn-secondary episode"
-                                                       href="{% url 'change-watched-episodes' slug=composition.slug episode=cur_ep %}">
+                                                       href="{% url 'change-watched-episodes' pk=pk episode=cur_ep %}">
                                                         {{ cur_ep }}</a>
-                                                {% elif cur_ep <= composition.episodes %}
+                                                {% elif cur_ep <= episodes %}
                                                     <a type="button" class="btn btn-outline-secondary episode"
-                                                       href="{% url 'change-watched-episodes' slug=composition.slug episode=cur_ep %}">
+                                                       href="{% url 'change-watched-episodes' pk=pk episode=cur_ep %}">
                                                         {{ cur_ep }}</a>
                                                 {% endif %}
                                             {% endwith %}
@@ -52,55 +52,42 @@
                     </tr>
                 {% endif %}
 
-                {% if composition.url_info %}
+                {% if url_info %}
                     <tr>
                         <td>Кинопоиск</td>
-                        <td><a href="{{ composition.url_info }}">{{ composition.url_info }}</a></td>
+                        <td><a href="{{ url_info }}">{{ url_info }}</a></td>
                     </tr>
                 {% endif %}
 
-                {% if composition.url_to_watch %}
+                {% if url_to_watch %}
                     <tr>
                         <td>ДорамаТВ</td>
-                        <td><a href="{{ composition.url_to_watch }}">{{ composition.url_to_watch }}</a></td>
+                        <td><a href="{{ url_to_watch }}">{{ url_to_watch }}</a></td>
                     </tr>
                 {% endif %}
 
                 <tr>
-                    {% if composition.last_watched == composition.episodes or composition.type == "movie" %}
+                    {% if last_watched == episodes or type == "movie" %}
                         <td>Мой рейтинг</td>
-                        <td>
+                        <td class="input-group mb-3">
                             <form method='POST'>
                                 {% csrf_token %}
-                                {{ form.rating_my|as_crispy_field }}
-                                <input class="btn btn-outline-success" type="submit" value="Оценить"/>
+                                <label>
+                                    <input class="form-control" type="float" name="rating_my" placeholder={{ rating_my }}>
+                                </label>
+                                <div class="input-group-append">
+                                    <input class="btn btn-outline-success" type="submit" value="Оценить"/>
+                                </div>
                             </form>
                         </td>
                     {% endif %}
-                </tr>
-
-                <tr>
-                    <td>Игнорировать</td>
-                    <td>
-                        {% if composition.to_ignore %}
-                            <a type="button" class="btn btn-outline-success"
-                               href="{% url 'change-to-ignored' slug=composition.slug is_ignored=0 %}">
-                                ✗
-                            </a>
-                        {% else %}
-                            <a type="button" class="btn btn-outline-danger"
-                               href="{% url 'change-to-ignored' slug=composition.slug is_ignored=1 %}">
-                                ✔
-                            </a>
-                        {% endif %}
-                    </td>
                 </tr>
                 </tbody>
             </table>
         </div>
     </div>
 
-    {% if group_show %}
+    {% if group.show %}
 
         <!--костыль чтобы между информацией и группой было место-->
         <div class="card border-light mb-3 col-lg-4" style="max-width: 5rem;">

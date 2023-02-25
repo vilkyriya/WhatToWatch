@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.utils.html import format_html
 
 from catalog.models import Composition, Group
 
@@ -10,11 +11,13 @@ class CompositionAdmin(admin.ModelAdmin):
     list_editable = ('rating_my',)
     search_fields = ('name', 'name_eng', 'slug',)
     raw_id_fields = ('id_group',)
+    readonly_fields = ('get_absolute_url',)
 
     fieldsets = (
         ('Общие параметры', {
             'fields': (
                 'type', 'name', 'name_eng', 'year', 'url_info', 'url_to_watch', 'id_group', 'status', 'to_ignore',
+                'get_absolute_url',
             )
         }),
         ('Параметры для сериалов и шоу', {
@@ -26,6 +29,18 @@ class CompositionAdmin(admin.ModelAdmin):
             'fields': ('slug', 'rating_my',),
         }),
     )
+
+    @admin.display(
+        description='Посмотреть на сайте',
+    )
+    def get_absolute_url(self, instance):
+        if instance.pk:
+            return format_html(
+                "<a href='{url}'>Ссылка</a>",
+                url=f'http://127.0.0.1:8000{instance.get_absolute_url()}',
+            )
+        else:
+            return None
 
 
 class CompositionInline(admin.TabularInline):
