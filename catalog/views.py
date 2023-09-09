@@ -113,8 +113,23 @@ def change_watched_episodes(request, **kwargs):
 
 def change_to_ignored(request, **kwargs):
     composition = get_object_or_404(Composition, pk=kwargs['pk'])
-    group_compositions = Composition.objects.filter(id_group__id_group=composition.id_group_id)
     is_ignored = bool(int(kwargs['is_ignored']))
+
+    if composition.id_group_id:
+        group_compositions = Composition.objects.filter(id_group__id_group=composition.id_group_id)
+
+        if is_ignored:
+            message = f'Группа {composition.id_group.name} добавлена в игнорируемые'
+        else:
+            message = f'Группа {composition.id_group.name} удалена из игнорируемых'
+
+    else:
+        group_compositions = (composition,)
+
+        if is_ignored:
+            message = f'Композиция {composition.name} добавлена в игнорируемые'
+        else:
+            message = f'Композиция {composition.name} удалена из игнорируемых'
 
     for group_composition in group_compositions:
         try:
@@ -125,11 +140,6 @@ def change_to_ignored(request, **kwargs):
         except IntegrityError:
             messages.warning(request, 'Ошибка. Попробуйте еще раз')
             redirect('composition', pk=kwargs['pk'])
-
-    if is_ignored:
-        message = f'Группа {composition.id_group.name} добавлена в игнорируемые'
-    else:
-        message = f'Группа {composition.id_group.name} удалена из игнорируемых'
 
     messages.success(request, message)
     return redirect('composition', pk=kwargs['pk'])
