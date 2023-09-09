@@ -84,7 +84,7 @@
                     {% endif %}
                 </tr>
 
-                {% if type == 'movie' and status != 'watched'  %}
+                {% if not group.show and status != 'watched'  %}
                     <tr>
                         <td>Игнорировать</td>
                         <td>
