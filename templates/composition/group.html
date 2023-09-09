@@ -7,10 +7,10 @@
                     <h5><strong>Из серии</strong></h5>
                 </th>
             </tr>
-            {% for group_comp in group_show %}
+            {% for group_comp in group.show %}
                 <tr>
                     <td>
-                        {% if group_comp.full_name == composition.full_name %}
+                        {% if group_comp.full_name == full_name %}
                             <a class="btn-link disabled" href="#" style="color:#18bc9c;">
                                 <div class="card-text">{{ group_comp.full_name }}</div>
                             </a>
@@ -22,10 +22,28 @@
                     </td>
                 </tr>
             {% endfor %}
+            {% if status != 'watched' %}
+                <tr>
+                    <td>Игнорировать</td>
+                    <td>
+                        {% if to_ignore %}
+                            <a type="button" class="btn btn-outline-success"
+                               href="{% url 'change-to-ignored' pk=pk is_ignored=0 %}">
+                                ✗
+                            </a>
+                        {% else %}
+                            <a type="button" class="btn btn-outline-danger"
+                               href="{% url 'change-to-ignored' pk=pk is_ignored=1 %}">
+                                ✔
+                            </a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endif %}
             </tbody>
         </table>
 
-        {% if group_collapse %}
+        {% if group.collapse %}
             <table class="table table-hover">
                 <thead>
                 <tr>
@@ -39,10 +57,10 @@
                 </thead>
 
                 <tbody class="collapse" id="collapseExample">
-                {% for group_comp in group_collapse %}
+                {% for group_comp in group.collapse %}
                     <tr>
                         <td>
-                            {% if group_comp.full_name == composition.full_name %}
+                            {% if group_comp.full_name == full_name %}
                                 <a class="btn-link disabled" href="#" style="color:#18bc9c;">
                                     <div class="card-text">{{ group_comp.full_name }}</div>
                                 </a>
